@@ -1,60 +1,42 @@
 import { MongoClient } from 'mongodb';
-import logUtil from '../logUtil';
-import config from '../../config';
 let dbClient;
 
 export default class MongoUtil {
 
+  constructor(connectionString) {
+    this.connectionString = connectionString;
+  }
+
   openConnection() {
     return new Promise((resolve, reject) => {
       if (!dbClient) {
-        MongoClient.connect(config.get('db.url'), (err, db) => {
+        MongoClient.connect(this.connectionString, (err, db) => {
           if (err) {
-            reject(err);
+            reject({ status: false, message: err });
           } else {
             dbClient = db;
-            resolve();
+            resolve({ status: true });
           }
         });
       } else {
-        resolve()
+        reject({ status: false, message: 'DB cant be open' });
       }
     });
   }
 
-  insertOne(collectionName, data) {
-    return new Promise((resolve, reject) => {
-      if (dbClient) {
-          const collection = dbClient.collection(collectionName);
-          collection.insertOne(data, (err, result) => {
-            if (err) {
-              logUtil.log(`Error insertOne ${err}`);
-              reject({ status: false });
-            } else {
-              resolve(result.result);
-            }
-          });
-      } else {
-        logUtil.log(`Error :: DB must be open`);
-        reject({ status: false });
-      }
-    });
-  }
-
-  findOne(collectionName, filter, options) {
+  insert(collectionName, data) {
     return new Promise((resolve, reject) => {
       if (dbClient) {
         const collection = dbClient.collection(collectionName);
-        collection.findOne(filter, options, (err, document) => {
+        collection.insert(data, (err, result) => {
           if (err) {
-            reject(err);
+            reject({ status: false, message: err });
           } else {
-            resolve(document);
+            resolve({ status: true, data: result.result });
           }
         });
       } else {
-        logUtil.log(`Error :: DB must be open`);
-        reject({ status: false });
+        reject({ status: false, message: 'DB must be open' });
       }
     });
   }
@@ -74,8 +56,7 @@ export default class MongoUtil {
             }
           });
       } else {
-        logUtil.log(`Error :: DB must be open`);
-        reject({ status: false });
+        reject({ status: false, message: 'DB must be open' });
       }
     });
   }
