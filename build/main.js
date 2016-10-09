@@ -105,6 +105,24 @@ module.exports =
 	      });
 	    }
 	  }, {
+	    key: 'update',
+	    value: function update(collectionName, data, filter) {
+	      return new Promise(function (resolve, reject) {
+	        if (dbClient) {
+	          var collection = dbClient.collection(collectionName);
+	          collection.update(filter, { $set: data }, { upsert: true }, function (err, result) {
+	            if (err) {
+	              resolve({ status: false, message: err });
+	            } else {
+	              resolve({ status: true, data: result.result });
+	            }
+	          });
+	        } else {
+	          reject({ status: false, message: 'DB must be open' });
+	        }
+	      });
+	    }
+	  }, {
 	    key: 'find',
 	    value: function find(collectionName, filter, options, skip, limit) {
 	      return new Promise(function (resolve, reject) {
