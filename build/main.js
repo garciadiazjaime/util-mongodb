@@ -53,7 +53,13 @@ module.exports =
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _mongodb = __webpack_require__(1);
+	var _lodash = __webpack_require__(1);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _mongodb = __webpack_require__(2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -110,7 +116,8 @@ module.exports =
 	      return new Promise(function (resolve, reject) {
 	        if (dbClient) {
 	          var collection = dbClient.collection(collectionName);
-	          collection.update(filter, { $set: data }, { upsert: true }, function (err, result) {
+	          var newData = _lodash2.default.omit(data, '_id');
+	          collection.update(filter, { $set: newData }, { upsert: true }, function (err, result) {
 	            if (err) {
 	              resolve({ status: false, message: err });
 	            } else {
@@ -154,6 +161,12 @@ module.exports =
 
 /***/ },
 /* 1 */
+/***/ function(module, exports) {
+
+	module.exports = require("lodash");
+
+/***/ },
+/* 2 */
 /***/ function(module, exports) {
 
 	module.exports = require("mongodb");

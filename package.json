@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/garciadiazjaime/util-mongodb#readme",
   "dependencies": {
+    "lodash": "^4.16.4",
     "mongodb": "^2.1.18"
   },
   "devDependencies": {

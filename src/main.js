@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { MongoClient } from 'mongodb';
 let dbClient;
 
@@ -45,7 +46,8 @@ export default class MongoUtil {
     return new Promise((resolve, reject) => {
       if (dbClient) {
         const collection = dbClient.collection(collectionName);
-        collection.update(filter, { $set: data }, { upsert: true }, (err, result) => {
+        const newData = _.omit(data, '_id');
+        collection.update(filter, { $set: newData }, { upsert: true }, (err, result) => {
           if (err) {
             resolve({ status: false, message: err });
           } else {
