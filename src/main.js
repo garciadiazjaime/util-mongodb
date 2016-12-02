@@ -1,3 +1,4 @@
+/* eslint max-len: [2, 500, 4] */
 import _ from 'lodash';
 import { MongoClient } from 'mongodb';
 let dbClient;
@@ -42,12 +43,12 @@ export default class MongoUtil {
     });
   }
 
-  update(collectionName, data, filter) {
+  update(collectionName, data, filter, options) {
     return new Promise((resolve, reject) => {
       if (dbClient) {
         const collection = dbClient.collection(collectionName);
         const newData = _.omit(data, '_id');
-        collection.update(filter, { $set: newData }, { upsert: true }, (err, result) => {
+        collection.update(filter || {}, { $set: newData }, options || { upsert: true }, (err, result) => {
           if (err) {
             resolve({ status: false, message: err });
           } else {

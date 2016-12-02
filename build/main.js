@@ -51,7 +51,8 @@ module.exports =
 	  value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* eslint max-len: [2, 500, 4] */
+
 
 	var _lodash = __webpack_require__(1);
 
@@ -112,12 +113,12 @@ module.exports =
 	    }
 	  }, {
 	    key: 'update',
-	    value: function update(collectionName, data, filter) {
+	    value: function update(collectionName, data, filter, options) {
 	      return new Promise(function (resolve, reject) {
 	        if (dbClient) {
 	          var collection = dbClient.collection(collectionName);
 	          var newData = _lodash2.default.omit(data, '_id');
-	          collection.update(filter, { $set: newData }, { upsert: true }, function (err, result) {
+	          collection.update(filter || {}, { $set: newData }, options || { upsert: true }, function (err, result) {
 	            if (err) {
 	              resolve({ status: false, message: err });
 	            } else {
