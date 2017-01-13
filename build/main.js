@@ -60,6 +60,8 @@ module.exports =
 
 	var _mongodb = __webpack_require__(2);
 
+	var _mongodb2 = _interopRequireDefault(_mongodb);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -147,6 +149,29 @@ module.exports =
 	          reject({ status: false, message: 'DB must be open' });
 	        }
 	      });
+	    }
+	  }, {
+	    key: 'findOne',
+	    value: function findOne(collectionName, filter) {
+	      return new Promise(function (resolve, reject) {
+	        if (dbClient) {
+	          var collection = dbClient.collection(collectionName);
+	          collection.findOne(filter || {}, function (err, item) {
+	            if (err) {
+	              reject(err);
+	            } else {
+	              resolve(item);
+	            }
+	          });
+	        } else {
+	          reject({ status: false, message: 'DB must be open' });
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'getObjectID',
+	    value: function getObjectID(id) {
+	      return new _mongodb2.default.ObjectID(id);
 	    }
 	  }, {
 	    key: 'closeConnection',

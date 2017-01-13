@@ -1,6 +1,6 @@
 /* eslint max-len: [2, 500, 4] */
 import _ from 'lodash';
-import { MongoClient } from 'mongodb';
+import mongo, { MongoClient } from 'mongodb';
 let dbClient;
 
 export default class MongoUtil {
@@ -79,6 +79,27 @@ export default class MongoUtil {
         reject({ status: false, message: 'DB must be open' });
       }
     });
+  }
+
+  findOne(collectionName, filter) {
+    return new Promise((resolve, reject) => {
+      if (dbClient) {
+        const collection = dbClient.collection(collectionName);
+        collection.findOne(filter || {}, (err, item) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(item);
+          }
+        });
+      } else {
+        reject({ status: false, message: 'DB must be open' });
+      }
+    });
+  }
+
+  getObjectID(id) {
+    return new mongo.ObjectID(id);
   }
 
   closeConnection() {
