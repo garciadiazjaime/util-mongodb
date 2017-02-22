@@ -105,7 +105,7 @@ module.exports =
 	            if (err) {
 	              reject({ status: false, message: err });
 	            } else {
-	              resolve({ status: true, data: result.result });
+	              resolve({ status: true, data: result });
 	            }
 	          });
 	        } else {
@@ -162,6 +162,20 @@ module.exports =
 	            } else {
 	              resolve(item);
 	            }
+	          });
+	        } else {
+	          reject({ status: false, message: 'DB must be open' });
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'dropCollection',
+	    value: function dropCollection(collectionName) {
+	      return new Promise(function (resolve, reject) {
+	        if (dbClient) {
+	          var collection = dbClient.collection(collectionName);
+	          collection.drop(function () {
+	            resolve();
 	          });
 	        } else {
 	          reject({ status: false, message: 'DB must be open' });

@@ -34,7 +34,7 @@ export default class MongoUtil {
           if (err) {
             reject({ status: false, message: err });
           } else {
-            resolve({ status: true, data: result.result });
+            resolve({ status: true, data: result });
           }
         });
       } else {
@@ -91,6 +91,19 @@ export default class MongoUtil {
           } else {
             resolve(item);
           }
+        });
+      } else {
+        reject({ status: false, message: 'DB must be open' });
+      }
+    });
+  }
+
+  dropCollection(collectionName) {
+    return new Promise((resolve, reject) => {
+      if (dbClient) {
+        const collection = dbClient.collection(collectionName);
+        collection.drop(() => {
+          resolve();
         });
       } else {
         reject({ status: false, message: 'DB must be open' });
