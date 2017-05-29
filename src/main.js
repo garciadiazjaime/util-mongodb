@@ -1,9 +1,13 @@
 /* eslint max-len: [2, 500, 4] */
 import _ from 'lodash';
-import mongo, { MongoClient } from 'mongodb';
+import mongo, { MongoClient, ObjectID } from 'mongodb';
 let dbClient;
 
 export default class MongoUtil {
+
+  static generateId() {
+    return new ObjectID();
+  }
 
   constructor(connectionString) {
     this.connectionString = connectionString;
@@ -52,7 +56,7 @@ export default class MongoUtil {
           if (err) {
             resolve({ status: false, message: err });
           } else {
-            resolve({ status: true, data: result.result });
+            resolve({ status: true, data: result });
           }
         });
       } else {

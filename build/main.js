@@ -69,6 +69,13 @@ module.exports =
 	var dbClient = void 0;
 
 	var MongoUtil = function () {
+	  _createClass(MongoUtil, null, [{
+	    key: 'generateId',
+	    value: function generateId() {
+	      return new _mongodb.ObjectID();
+	    }
+	  }]);
+
 	  function MongoUtil(connectionString) {
 	    _classCallCheck(this, MongoUtil);
 
@@ -124,7 +131,7 @@ module.exports =
 	            if (err) {
 	              resolve({ status: false, message: err });
 	            } else {
-	              resolve({ status: true, data: result.result });
+	              resolve({ status: true, data: result });
 	            }
 	          });
 	        } else {
